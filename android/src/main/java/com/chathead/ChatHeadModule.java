@@ -166,7 +166,8 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
         closeBtn.setOnClickListener(v -> {
           Intent intent = new Intent(Intent.ACTION_MAIN);
           intent.setComponent(new ComponentName("com.viaaurea.webWrapper","com.viaaurea.webWrapper.MainActivity"));
-          Context context = getReactApplicationContext();
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+          ReactApplicationContext context = getReactApplicationContext();
           context.startActivity(intent);
           sendEvent(context, "onCloseButtonClicked", null);
         });
