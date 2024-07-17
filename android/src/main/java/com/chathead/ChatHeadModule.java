@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.ComponentName;
 
 import java.io.IOException;
 
@@ -140,6 +141,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                 //to identify if the user clicked the view or not.
                 if (lastAction == MotionEvent.ACTION_DOWN) {
                   //Open the chat conversation click.
+                  sendEvent(context, "onButtonClicked", null);
                   Activity activity = getCurrentActivity();
                   startMainActivity();
                   //close the service and remove the chat heads
@@ -162,6 +164,9 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
         ImageView closeBtn = chatHeadView.findViewById(context.getResources().getIdentifier("close_btn", "id", context.getPackageName()));
         closeBtn.setOnClickListener(v -> {
+          Intent intent = new Intent(Intent.ACTION_MAIN);
+          intent.setComponent(new ComponentName("com.viaaurea.webWrapper","com.viaaurea.webWrapper.MainActivity"));
+          startActivity(intent);
           sendEvent(context, "onCloseButtonClicked", null);
         });
 
