@@ -154,7 +154,8 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
         ImageView closeBtn = chatHeadView.findViewById(context.getResources().getIdentifier("close_btn", "id", context.getPackageName()));
         closeBtn.setOnClickListener(v -> {
           //close the service and remove the chat head from the window
-          hideChatHead();
+          Activity activity = getCurrentActivity();
+          startMainActivity();
         });
 
         ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
