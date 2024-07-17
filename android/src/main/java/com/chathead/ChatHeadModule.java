@@ -8,9 +8,12 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
+
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -57,12 +60,15 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     return getCurrentActivity();
   }
   public void startMainActivity() {
-    Intent intent = getPackageManager().getLaunchIntentForPackage("com.viaaurea.webWrapper");
+    Context context = getReactApplicationContext();
+    PackageManager packageManager = context.getPackageManager();
+    Intent intent = packageManager.getLaunchIntentForPackage("com.viaaurea.webWrapper");
     if (intent != null) {
-        startActivity(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     } else {
-        // Handle the case where the package could not be found
-        Log.e("Intent", "Package not found!");
+        // Zpracujte případ, kdy balíček nebyl nalezen
+        Log.e("ChatHeadModule", "Package not found!");
     }
   }
 
