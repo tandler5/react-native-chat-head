@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 
 import android.app.Activity;
@@ -78,6 +79,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     if (chatHeadView != null) {
       chatHeadBadge = chatHeadView.findViewById(badgeId);
     }
+  }
+
+  private void sendEvent(ReactApplicationContext reactContext, String eventName, @Nullable WritableMap params) {
+    reactContext
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit(eventName, params);
   }
 
   private void RunHandler() {
@@ -153,9 +160,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
         ImageView closeBtn = chatHeadView.findViewById(context.getResources().getIdentifier("close_btn", "id", context.getPackageName()));
         closeBtn.setOnClickListener(v -> {
-          //close the service and remove the chat head from the window
-          Activity activity = getCurrentActivity();
-          startMainActivity();
+          sendEvent(context, "onCloseButtonClicked", null);
         });
 
         ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
