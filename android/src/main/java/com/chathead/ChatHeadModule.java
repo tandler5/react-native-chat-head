@@ -57,10 +57,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     return getCurrentActivity();
   }
   public void startMainActivity() {
-    Activity mainActivity = getMainActivity();
-    if (mainActivity != null) {
-      Intent intent = new Intent(mainActivity, getMainActivity().getClass());
-      mainActivity.startActivity(intent);
+    Intent intent = getPackageManager().getLaunchIntentForPackage("com.viaaurea.webWrapper");
+    if (intent != null) {
+        startActivity(intent);
+    } else {
+        // Handle the case where the package could not be found
+        Log.e("Intent", "Package not found!");
     }
   }
 
