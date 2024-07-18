@@ -46,6 +46,10 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private View chatHeadView;
   private WindowManager.LayoutParams params;
   private boolean isOverlayPermissionGranted = false;
+  private static final int MAX_CLICK_DISTANCE = 15;
+  private long pressStartTime;
+  private float pressedX;
+  private float pressedY;
   Boolean isOpen = false;
 
   public ChatHeadModule(ReactApplicationContext reactContext) {
@@ -134,21 +138,19 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   initialX = params.x;
                   initialY = params.y;
                   //get the touch location
+                  pressStartTime = System.currentTimeMillis();
+                  pressedX = event.getX();
+                  pressedY = event.getY();
                   initialTouchX = event.getRawX();
                   initialTouchY = event.getRawY();
                   lastAction = event.getAction();
                   return true;
-                case MotionEvent.ACTION_BUTTON_PRESS:
-                  //As we implemented on touch listener with ACTION_MOVE,
-                  //we have to check if the previous action was ACTION_DOWN
-                  //to identify if the user clicked the view or not.
-                  
-                  //Open the chat conversation click.
-                  sendEvent(context, "onButtonClicked", null);
-                    // Activity activity = getCurrentActivity();
-                    // startMainActivity();
-                    //close the service and remove the chat heads
-                  lastAction = event.getAction();
+                case MotionEvent.ACTION_UP:
+                  long pressDuration = System.currentTimeMillis() - pressStartTime;
+                  if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, e.getX(), e.getY()) < MAX_CLICK_DISTANCE) {
+                    sendEvent(context, "onButtonClicked", null);
+                  }
+
                   return true;
                 case MotionEvent.ACTION_MOVE:
                   //Calculate the X and Y coordinates of the view.
@@ -168,6 +170,17 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
         }
       }
     });
+  }
+
+  private static float distance(float x1, float y1, float x2, float y2) {
+    float dx = x1 - x2;
+    float dy = y1 - y2;
+    float distanceInPx = (float) Math.sqrt(dx * dx + dy * dy);
+    return pxToDp(distanceInPx);
+  }
+
+  private static float pxToDp(float px) {
+    return px / getResources().getDisplayMetrics().density;
   }
 
  @ReactMethod
