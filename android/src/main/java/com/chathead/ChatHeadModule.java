@@ -147,7 +147,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   return true;
                 case MotionEvent.ACTION_UP:
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
-                  if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, e.getX(), e.getY()) < MAX_CLICK_DISTANCE) {
+                  if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, e.getX(), e.getY(), context) < MAX_CLICK_DISTANCE) {
                     sendEvent(context, "onButtonClicked", null);
                   }
 
@@ -172,15 +172,15 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     });
   }
 
-  private static float distance(float x1, float y1, float x2, float y2) {
+  private static float distance(float x1, float y1, float x2, float y2, ReactApplicationContext reactContext) {
     float dx = x1 - x2;
     float dy = y1 - y2;
     float distanceInPx = (float) Math.sqrt(dx * dx + dy * dy);
-    return pxToDp(distanceInPx);
+    return pxToDp(distanceInPx, reactContext);
   }
 
-  private static float pxToDp(float px) {
-    return px / getReactApplicationContext().getResources().getDisplayMetrics().density;
+  private static float pxToDp(float px, ReactApplicationContext reactContext) {
+    return px / reactContext.getResources().getDisplayMetrics().density;
   }
 
  @ReactMethod
