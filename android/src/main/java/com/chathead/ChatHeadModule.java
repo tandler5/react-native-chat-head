@@ -148,7 +148,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   return true;
                 case MotionEvent.ACTION_UP:
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
-                  if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, e.getX(), e.getY(), context) < MAX_CLICK_DISTANCE) {
+                  if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, event.getX(), event.getY(), context) < MAX_CLICK_DISTANCE) {
                     sendEvent(context, "onButtonClicked", null);
                   }
 
