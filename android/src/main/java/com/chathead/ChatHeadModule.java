@@ -74,16 +74,11 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     return getCurrentActivity();
   }
   public void startMainActivity(String packageName) {
-    Context context = getReactApplicationContext();
-    PackageManager packageManager = context.getPackageManager();
-    Intent intent = packageManager.getLaunchIntentForPackage(packageName);
-    if (intent != null) {
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    } else {
-        // Zpracujte případ, kdy balíček nebyl nalezen
-        Log.e("ChatHeadModule", "Package not found!");
-    }
+    Intent intent = new Intent(Intent.ACTION_MAIN);
+    String mainActivityName = packageName + ".MainActivity";
+    intent.setComponent(new ComponentName(packageName, mainActivityName));
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
   }
 
   private void sendEvent(ReactApplicationContext reactContext, String eventName, @Nullable WritableMap params) {
