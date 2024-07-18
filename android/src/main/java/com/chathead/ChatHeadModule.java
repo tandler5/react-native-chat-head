@@ -76,9 +76,11 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   public void startMainActivity(String packageName) {
     Intent intent = new Intent(Intent.ACTION_MAIN);
     String mainActivityName = packageName + ".MainActivity";
+
     intent.setComponent(new ComponentName(packageName, mainActivityName));
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    startActivity(intent);
+    Context context = getReactApplicationContext();
+    context.startActivity(intent);
   }
 
   private void sendEvent(ReactApplicationContext reactContext, String eventName, @Nullable WritableMap params) {
