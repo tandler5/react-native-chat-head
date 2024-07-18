@@ -95,7 +95,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run() {
-        if(chatHeadBadge != null){
+        if(chatHeadBadge == null){
 
         
           if (windowManager == null) {
