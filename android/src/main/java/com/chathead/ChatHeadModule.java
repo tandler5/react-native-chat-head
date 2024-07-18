@@ -135,17 +135,16 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                 initialTouchY = event.getRawY();
                 lastAction = event.getAction();
                 return true;
-              case MotionEvent.ACTION_UP:
+              case MotionEvent.ACTION_BUTTON_PRESS:
                 //As we implemented on touch listener with ACTION_MOVE,
                 //we have to check if the previous action was ACTION_DOWN
                 //to identify if the user clicked the view or not.
-                if (lastAction == MotionEvent.ACTION_DOWN) {
-                  //Open the chat conversation click.
-                  sendEvent(context, "onButtonClicked", null);
-                  Activity activity = getCurrentActivity();
-                  startMainActivity();
+                
+                //Open the chat conversation click.
+                sendEvent(context, "onButtonClicked", null);
+                  // Activity activity = getCurrentActivity();
+                  // startMainActivity();
                   //close the service and remove the chat heads
-                }
                 lastAction = event.getAction();
                 return true;
               case MotionEvent.ACTION_MOVE:
