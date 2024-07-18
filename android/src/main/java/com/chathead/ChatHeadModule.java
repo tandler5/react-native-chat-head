@@ -170,7 +170,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                       packageName = "cz.smable.pos";
                     }
                   }else if(pressDuration>=5000 && stayedWithinClickDistance){
-                    sendEvent(context, "onButtonHolded", null)
+                    sendEvent(context, "onButtonHolded", null);
                   }
 
                   return true;
