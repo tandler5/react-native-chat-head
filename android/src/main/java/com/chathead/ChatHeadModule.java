@@ -51,6 +51,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private long pressStartTime;
   private float pressedX;
   private float pressedY;
+  private boolean stayedWithinClickDistance;
   Boolean isOpen = false;
 
   public ChatHeadModule(ReactApplicationContext reactContext) {
@@ -128,11 +129,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-              WritableMap eventData = Arguments.createMap();
-              eventData.putString("action", String.valueOf(event.getAction()));
-
-              sendEvent(context, "onButtonClicked", eventData);
-
               switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                   //remember the initial position.
@@ -142,19 +138,23 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   pressStartTime = System.currentTimeMillis();
                   pressedX = event.getX();
                   pressedY = event.getY();
+                  stayedWithinClickDistance = true;
                   initialTouchX = event.getRawX();
                   initialTouchY = event.getRawY();
                   lastAction = event.getAction();
                   return true;
                 case MotionEvent.ACTION_UP:
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
-                  if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, event.getX(), event.getY(), context) < MAX_CLICK_DISTANCE) {
+                  if (pressDuration < MAX_CLICK_DURATION && stayedWithinClickDistance) {
                     sendEvent(context, "onButtonClicked", null);
                   }
 
                   return true;
                 case MotionEvent.ACTION_MOVE:
                   //Calculate the X and Y coordinates of the view.
+                  if (stayedWithinClickDistance && distance(pressedX, pressedY, event.getX(), event.getY(), context) > MAX_CLICK_DISTANCE) {
+                    stayedWithinClickDistance = false;
+                  }
                   params.x = initialX + (int) (event.getRawX() - initialTouchX);
                   params.y = initialY + (int) (event.getRawY() - initialTouchY);
                   //Update the layout with new X & Y coordinate
