@@ -92,24 +92,10 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     context.startActivity(intent);
   }
 
-  private void sendEvent( String eventName, @Nullable WritableMap params) {
-    try {
-      getCurrentActivityOrThrow().runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-              ReactApplicationContext reactContext = getReactApplicationContext();
-              if (reactContext != null) {
-                  reactContext
-                      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                      .emit(eventName, params);
-              } else {
-                  Log.e("ChatHeadModule", "ReactApplicationContext is null in sendEvent");
-              }
-          }
-      });
-  } catch (Exception e) {
-      Log.e("ChatHeadModule", "Exception occurred while sending event: " + e.getMessage());
-  }
+  private void sendEvent(ReactApplicationContext reactContext, String eventName, @Nullable WritableMap params) {
+    reactContext
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit(eventName, params);
   }
 
   private void RunHandler() {
@@ -184,7 +170,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                       packageName = "cz.smable.pos";
                     }
                   }else if(pressDuration>=5000 && stayedWithinClickDistance){
-                    sendEvent("onButtonHolded", null);
+                    sendEvent(context, "onButtonHolded", null)
                   }
 
                   return true;
