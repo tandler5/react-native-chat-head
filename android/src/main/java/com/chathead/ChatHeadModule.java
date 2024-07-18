@@ -121,7 +121,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
           ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
           
-          chatHeadViewLayout.setOnClickListener(new View.OnClickListener() {
+          chatHeadView.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick (View v) {
                 sendEvent(context, "onButtonClicked", null);
