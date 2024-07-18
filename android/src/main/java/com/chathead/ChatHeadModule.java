@@ -36,7 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ComponentName;
 import android.content.SharedPreferences;
-import com.chathead.R;
+import com.viaaurea.webWrapper.R;
 
 import java.io.IOException;
 
