@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ComponentName;
 import android.content.SharedPreferences;
+import com.chathead.R;
 
 import java.io.IOException;
 
@@ -73,13 +74,21 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private Activity getMainActivity() {
     return getCurrentActivity();
   }
-  public void startMainActivity(String packageName) {
+  public void startMainActivity(String packageName, ImageView chatHeadImage) {
+
+    Context context = getReactApplicationContext();
+
+    if ("cz.smable.pos".equals(packageName)) {
+      chatHeadImage.setImageResource(context.getResources().getIdentifier("chat_head_profile_iv", "id", context.getPackageName()));
+    }else {
+      chatHeadImage.setImageResource(R.mipmap.ic_launcher);
+    }
+
     Intent intent = new Intent(Intent.ACTION_MAIN);
     String mainActivityName = packageName + ".MainActivity";
 
     intent.setComponent(new ComponentName(packageName, mainActivityName));
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    Context context = getReactApplicationContext();
     context.startActivity(intent);
   }
 
@@ -124,6 +133,9 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
           ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
 
+          ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
+
+
           chatHeadView.setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
             private int initialY;
@@ -151,7 +163,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                 case MotionEvent.ACTION_UP:
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
                   if (pressDuration < MAX_CLICK_DURATION && stayedWithinClickDistance) {
-                    startMainActivity(packageName);
+                    startMainActivity(packageName, chatHeadImage);
                     if(packageName == "cz.smable.pos"){
                       packageName = "com.viaaurea.webWrapper";
                     }else{
@@ -176,7 +188,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
             }
           });
 
-          ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
           windowManager.addView(chatHeadView, params);
         }
       }
