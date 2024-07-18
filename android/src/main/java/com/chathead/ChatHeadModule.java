@@ -79,8 +79,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     Context context = getReactApplicationContext();
 
     if ("cz.smable.pos" == packageName) {
-      int resId = context.getResources().getIdentifier("chat_head_profile_iv", "drawable", context.getPackageName());
-      chatHeadImage.setImageResource(resId);
+      chatHeadImage.setImageResource(R.drawable.smable);
     }else {
       chatHeadImage.setImageResource(R.drawable.logo);
     }
