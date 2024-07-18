@@ -180,7 +180,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   }
 
   private static float pxToDp(float px) {
-    return px / context.getResources().getDisplayMetrics().density;
+    return px / getReactApplicationContext().getResources().getDisplayMetrics().density;
   }
 
  @ReactMethod
