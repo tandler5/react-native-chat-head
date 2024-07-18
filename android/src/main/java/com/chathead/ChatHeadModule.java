@@ -10,6 +10,7 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import androidx.annotation.Nullable;
+import com.chathead.R;
 
 
 import android.app.Activity;
