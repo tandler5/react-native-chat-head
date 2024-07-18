@@ -120,9 +120,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
           LayoutInflater inflater = LayoutInflater.from(context);
           chatHeadView = inflater.inflate(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
-          iconView = inflater.inflate(context.getResources().getIdentifier("icon_layout", "layout", context.getPackageName()), null);
-          ImageView smableIcon = iconView.findViewById(context.getResources().getIdentifier("chat_smable_icon", "id", context.getPackageName()));
-          Drawable drawable = smableIcon.getDrawable();
 
 
           ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
@@ -186,7 +183,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
           });
 
           ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
-          chatHeadImage.setImageDrawable(drawable);
           windowManager.addView(chatHeadView, params);
           findChatHeadBadge();
         }
