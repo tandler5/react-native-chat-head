@@ -10,7 +10,6 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import androidx.annotation.Nullable;
-import com.chathead.R;
 
 
 import android.app.Activity;
@@ -31,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -121,10 +119,9 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
           LayoutInflater inflater = LayoutInflater.from(context);
           chatHeadView = inflater.inflate(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
 
-
           ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
           chatHeadViewLayout.setOnClickListener(v -> {
-            sendEvent(context, "onButtonClicked", null);
+            sendEvent(context, "onCloseButtonClicked", null);
           });
 
           chatHeadView.setOnTouchListener(new View.OnTouchListener() {
@@ -169,17 +166,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
               }
               return false;
             }
-          });
-
-
-          ImageView closeBtn = chatHeadView.findViewById(context.getResources().getIdentifier("close_btn", "id", context.getPackageName()));
-          closeBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.setComponent(new ComponentName("com.viaaurea.webWrapper","com.viaaurea.webWrapper.MainActivity"));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ReactApplicationContext context = getReactApplicationContext();
-            context.startActivity(intent);
-            sendEvent(context, "onCloseButtonClicked", null);
           });
 
           ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));

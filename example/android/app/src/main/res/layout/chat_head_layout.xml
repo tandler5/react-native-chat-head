@@ -14,7 +14,7 @@
     android:layout_width="60dp"
     android:layout_height="60dp"
     android:layout_marginTop="8dp"
-    android:src="@drawable/ic_smable"
+    android:src="@mipmap/ic_launcher"
     tools:ignore="ContentDescription"
   />
 
@@ -28,6 +28,16 @@
     tools:ignore="ContentDescription"
   />
 
+
+    <!--Smable Logo button-->
+   <ImageView
+    android:id="@+id/smable"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_marginLeft="8dp"
+    android:src="@drawable/ic_smable"
+    tools:ignore="ContentDescription"
+  />
     <!-- chat_head_badge     -->
     <TextView
     android:id="@+id/chat_head_badge"
