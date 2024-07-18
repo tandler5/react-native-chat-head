@@ -95,85 +95,94 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run() {
-        if (windowManager == null) {
-          windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
-        }
+        if(chatHeadBadge != null){
 
-        params = new WindowManager.LayoutParams(
-          WindowManager.LayoutParams.WRAP_CONTENT,
-          WindowManager.LayoutParams.WRAP_CONTENT,
-          Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
-            WindowManager.LayoutParams.TYPE_PHONE,
-          WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-          PixelFormat.TRANSLUCENT
-        );
-
-        params.gravity = Gravity.TOP | Gravity.START;
-        params.x = 0;
-        params.y = 100;
-
-        LayoutInflater inflater = LayoutInflater.from(context);
-        chatHeadView = inflater.inflate(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
-
-        chatHeadView.setOnTouchListener(new View.OnTouchListener() {
-          private int initialX;
-          private int initialY;
-          private float initialTouchX;
-          private float initialTouchY;
-          private int lastAction;
-
-          @Override
-          public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-              case MotionEvent.ACTION_DOWN:
-                //remember the initial position.
-                initialX = params.x;
-                initialY = params.y;
-                //get the touch location
-                initialTouchX = event.getRawX();
-                initialTouchY = event.getRawY();
-                lastAction = event.getAction();
-                return true;
-              case MotionEvent.ACTION_BUTTON_PRESS:
-                //As we implemented on touch listener with ACTION_MOVE,
-                //we have to check if the previous action was ACTION_DOWN
-                //to identify if the user clicked the view or not.
-                
-                //Open the chat conversation click.
-                sendEvent(context, "onButtonClicked", null);
-                  // Activity activity = getCurrentActivity();
-                  // startMainActivity();
-                  //close the service and remove the chat heads
-                lastAction = event.getAction();
-                return true;
-              case MotionEvent.ACTION_MOVE:
-                //Calculate the X and Y coordinates of the view.
-                params.x = initialX + (int) (event.getRawX() - initialTouchX);
-                params.y = initialY + (int) (event.getRawY() - initialTouchY);
-                //Update the layout with new X & Y coordinate
-                windowManager.updateViewLayout(chatHeadView, params);
-                lastAction = event.getAction();
-                return true;
-            }
-            return false;
+        
+          if (windowManager == null) {
+            windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
           }
-        });
+
+          params = new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
+              WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
+              WindowManager.LayoutParams.TYPE_PHONE,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+          );
+
+          params.gravity = Gravity.TOP | Gravity.START;
+          params.x = 0;
+          params.y = 100;
+
+          LayoutInflater inflater = LayoutInflater.from(context);
+          chatHeadView = inflater.inflate(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
+
+          ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
+          chatHeadViewLayout.setOnClickListener(v -> {
+            sendEvent(context, "onButtonClicked", null);
+          });
+
+          chatHeadView.setOnTouchListener(new View.OnTouchListener() {
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+            private int lastAction;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+              switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                  //remember the initial position.
+                  initialX = params.x;
+                  initialY = params.y;
+                  //get the touch location
+                  initialTouchX = event.getRawX();
+                  initialTouchY = event.getRawY();
+                  lastAction = event.getAction();
+                  return true;
+                case MotionEvent.ACTION_BUTTON_PRESS:
+                  //As we implemented on touch listener with ACTION_MOVE,
+                  //we have to check if the previous action was ACTION_DOWN
+                  //to identify if the user clicked the view or not.
+                  
+                  //Open the chat conversation click.
+                  sendEvent(context, "onButtonClicked", null);
+                    // Activity activity = getCurrentActivity();
+                    // startMainActivity();
+                    //close the service and remove the chat heads
+                  lastAction = event.getAction();
+                  return true;
+                case MotionEvent.ACTION_MOVE:
+                  //Calculate the X and Y coordinates of the view.
+                  params.x = initialX + (int) (event.getRawX() - initialTouchX);
+                  params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                  //Update the layout with new X & Y coordinate
+                  windowManager.updateViewLayout(chatHeadView, params);
+                  lastAction = event.getAction();
+                  return true;
+              }
+              return false;
+            }
+          });
 
 
-        ImageView closeBtn = chatHeadView.findViewById(context.getResources().getIdentifier("close_btn", "id", context.getPackageName()));
-        closeBtn.setOnClickListener(v -> {
-          Intent intent = new Intent(Intent.ACTION_MAIN);
-          intent.setComponent(new ComponentName("com.viaaurea.webWrapper","com.viaaurea.webWrapper.MainActivity"));
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          ReactApplicationContext context = getReactApplicationContext();
-          context.startActivity(intent);
-          sendEvent(context, "onCloseButtonClicked", null);
-        });
+          ImageView closeBtn = chatHeadView.findViewById(context.getResources().getIdentifier("close_btn", "id", context.getPackageName()));
+          closeBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setComponent(new ComponentName("com.viaaurea.webWrapper","com.viaaurea.webWrapper.MainActivity"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ReactApplicationContext context = getReactApplicationContext();
+            context.startActivity(intent);
+            sendEvent(context, "onCloseButtonClicked", null);
+          });
 
-        ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
-        windowManager.addView(chatHeadView, params);
-        findChatHeadBadge();
+          ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
+          windowManager.addView(chatHeadView, params);
+          findChatHeadBadge();
+        }
       }
     });
   }
