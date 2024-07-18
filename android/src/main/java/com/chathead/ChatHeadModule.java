@@ -46,6 +46,8 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private View chatHeadView;
   private WindowManager.LayoutParams params;
   private boolean isOverlayPermissionGranted = false;
+  private boolean isChatHeadActive = false;
+  private String packageName = "cz.smable.pos";
   private static final int MAX_CLICK_DISTANCE = 15;
   private static final int MAX_CLICK_DURATION = 1000;
   private long pressStartTime;
@@ -69,10 +71,10 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private Activity getMainActivity() {
     return getCurrentActivity();
   }
-  public void startMainActivity() {
+  public void startMainActivity(String packageName) {
     Context context = getReactApplicationContext();
     PackageManager packageManager = context.getPackageManager();
-    Intent intent = packageManager.getLaunchIntentForPackage("com.viaaurea.webWrapper");
+    Intent intent = packageManager.getLaunchIntentForPackage(packageName);
     if (intent != null) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -93,8 +95,8 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run() {
-        if(chatHeadView == null){
-
+        if(isChatHeadActive == false){
+          isChatHeadActive = true;
         
           if (windowManager == null) {
             windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
@@ -146,7 +148,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                 case MotionEvent.ACTION_UP:
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
                   if (pressDuration < MAX_CLICK_DURATION && stayedWithinClickDistance) {
-                    sendEvent(context, "onButtonClicked", null);
+                    startMainActivity(packageName);
+                    if(packageName === "cz.smable.pos"){
+                      packageName = "com.viaaurea.webWrapper";
+                    }else{
+                      packageName = "cz.smable.pos";
+                    }
                   }
 
                   return true;
