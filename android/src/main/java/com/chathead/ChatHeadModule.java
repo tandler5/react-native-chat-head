@@ -47,6 +47,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private WindowManager.LayoutParams params;
   private boolean isOverlayPermissionGranted = false;
   private static final int MAX_CLICK_DISTANCE = 15;
+  private static final int MAX_CLICK_DURATION = 1000;
   private long pressStartTime;
   private float pressedX;
   private float pressedY;
