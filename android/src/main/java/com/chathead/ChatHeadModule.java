@@ -92,9 +92,24 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     context.startActivity(intent);
   }
 
-  private void sendEvent(String eventName, @Nullable WritableMap params) {
-    Context context = getReactApplicationContext();
-    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
+  private void sendEvent( String eventName, @Nullable WritableMap params) {
+    try {
+      getCurrentActivityOrThrow().runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+              ReactApplicationContext reactContext = getReactApplicationContext();
+              if (reactContext != null) {
+                  reactContext
+                      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                      .emit(eventName, params);
+              } else {
+                  Log.e("ChatHeadModule", "ReactApplicationContext is null in sendEvent");
+              }
+          }
+      });
+  } catch (Exception e) {
+      Log.e("ChatHeadModule", "Exception occurred while sending event: " + e.getMessage());
+  }
   }
 
   private void RunHandler() {
