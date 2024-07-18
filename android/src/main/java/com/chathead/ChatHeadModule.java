@@ -149,7 +149,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
                   if (pressDuration < MAX_CLICK_DURATION && stayedWithinClickDistance) {
                     startMainActivity(packageName);
-                    if(packageName === "cz.smable.pos"){
+                    if(packageName == "cz.smable.pos"){
                       packageName = "com.viaaurea.webWrapper";
                     }else{
                       packageName = "cz.smable.pos";
