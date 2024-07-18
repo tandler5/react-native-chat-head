@@ -44,7 +44,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private WindowManager windowManager;
   private View chatHeadView;
   private WindowManager.LayoutParams params;
-  private TextView chatHeadBadge; // Add this line to declare the TextView for badge count
   private boolean isOverlayPermissionGranted = false;
   Boolean isOpen = false;
 
@@ -76,14 +75,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     }
   }
 
-  public void findChatHeadBadge() {
-    // Retrieve the chat head badge TextView when the host resumes
-    int badgeId = context.getResources().getIdentifier("chat_head_badge", "id", context.getPackageName());
-    if (chatHeadView != null) {
-      chatHeadBadge = chatHeadView.findViewById(badgeId);
-    }
-  }
-
   private void sendEvent(ReactApplicationContext reactContext, String eventName, @Nullable WritableMap params) {
     reactContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
@@ -95,7 +86,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run() {
-        if(chatHeadBadge == null){
+        if(chatHeadView == null){
 
         
           if (windowManager == null) {
@@ -120,13 +111,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
           chatHeadView = inflater.inflate(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
 
           ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
-          
-          chatHeadView.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick (View v) {
-                sendEvent(context, "onButtonClicked", null);
-              }
-          });
 
           chatHeadView.setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
@@ -137,6 +121,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
+              WritableMap eventData = Arguments.createMap();
+              eventData.putString("action", event.getAction());
+
+              sendEvent(context, "onButtonClicked", eventData);
+
               switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                   //remember the initial position.
@@ -174,7 +164,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
           ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
           windowManager.addView(chatHeadView, params);
-          findChatHeadBadge();
         }
       }
     });
@@ -226,12 +215,6 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
         }
       }
     });
-  }
-  @ReactMethod
-  public void updateBadgeCount(int count) {
-    if (chatHeadBadge != null) {
-      chatHeadBadge.setText(String.valueOf(count));
-    }
   }
 
 }
