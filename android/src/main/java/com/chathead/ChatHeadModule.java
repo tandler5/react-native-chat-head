@@ -180,6 +180,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
           });
 
           ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
+          chatHeadImage.setImageResource(R.drawable.ic_smable); 
           windowManager.addView(chatHeadView, params);
           findChatHeadBadge();
         }
