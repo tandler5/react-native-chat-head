@@ -92,8 +92,9 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     context.startActivity(intent);
   }
 
-  private void sendEvent(ReactApplicationContext reactContext, String eventName, @Nullable WritableMap params) {
-    reactContext
+  private void sendEvent(String eventName, @Nullable WritableMap params) {
+    Context context = getReactApplicationContext();
+    context
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
         .emit(eventName, params);
   }
@@ -170,7 +171,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                       packageName = "cz.smable.pos";
                     }
                   }else if(pressDuration>=5000 && stayedWithinClickDistance){
-                    sendEvent(context, "onButtonHolded", null);
+                    sendEvent("onButtonHolded", null);
                   }
 
                   return true;
