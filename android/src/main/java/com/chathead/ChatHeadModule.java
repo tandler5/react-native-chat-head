@@ -124,7 +124,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
             public boolean onTouch(View v, MotionEvent event) {
 
               WritableMap eventData = Arguments.createMap();
-              eventData.putString("action", event.getAction());
+              eventData.putString("action", String.valueOf(event.getAction()));
 
               sendEvent(context, "onButtonClicked", eventData);
 
