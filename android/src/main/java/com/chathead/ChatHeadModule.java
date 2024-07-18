@@ -12,7 +12,6 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import androidx.annotation.Nullable;
 
-
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
@@ -74,13 +73,14 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private Activity getMainActivity() {
     return getCurrentActivity();
   }
+
   public void startMainActivity(String packageName, ImageView chatHeadImage) {
 
     Context context = getReactApplicationContext();
 
     if ("cz.smable.pos" == packageName) {
       chatHeadImage.setImageResource(R.drawable.logo);
-    }else {
+    } else {
       chatHeadImage.setImageResource(R.drawable.smable);
     }
 
@@ -105,36 +105,36 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
       public void run() {
         String isChatHeadActive = sharedPreferences.getString("isChatHeadActive", "");
 
-        if(isChatHeadActive != "yes"){
+        if (isChatHeadActive != "yes") {
           SharedPreferences.Editor editor = sharedPreferences.edit();
           editor.putString("isChatHeadActive", "yes");
           editor.apply();
-        
+
           if (windowManager == null) {
             windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
           }
 
           params = new WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
-              WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
-              WindowManager.LayoutParams.TYPE_PHONE,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-          );
+              WindowManager.LayoutParams.WRAP_CONTENT,
+              WindowManager.LayoutParams.WRAP_CONTENT,
+              Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                  : WindowManager.LayoutParams.TYPE_PHONE,
+              WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+              PixelFormat.TRANSLUCENT);
 
           params.gravity = Gravity.TOP | Gravity.START;
           params.x = 0;
           params.y = 100;
 
           LayoutInflater inflater = LayoutInflater.from(context);
-          chatHeadView = inflater.inflate(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
+          chatHeadView = inflater.inflate(
+              context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()), null);
 
-          ImageView chatHeadViewLayout = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
+          ImageView chatHeadViewLayout = chatHeadView.findViewById(
+              context.getResources().getIdentifier("chat_head_layout", "layout", context.getPackageName()));
 
-          ImageView chatHeadImage = chatHeadView.findViewById(context.getResources().getIdentifier("chat_head_profile_iv","id",context.getPackageName()));
-
+          ImageView chatHeadImage = chatHeadView.findViewById(
+              context.getResources().getIdentifier("chat_head_profile_iv", "id", context.getPackageName()));
 
           chatHeadView.setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
@@ -148,10 +148,10 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
               switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                  //remember the initial position.
+                  // remember the initial position.
                   initialX = params.x;
                   initialY = params.y;
-                  //get the touch location
+                  // get the touch location
                   pressStartTime = System.currentTimeMillis();
                   pressedX = event.getX();
                   pressedY = event.getY();
@@ -164,24 +164,25 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   long pressDuration = System.currentTimeMillis() - pressStartTime;
                   if (pressDuration < MAX_CLICK_DURATION && stayedWithinClickDistance) {
                     startMainActivity(packageName, chatHeadImage);
-                    if(packageName == "cz.smable.pos"){
+                    if (packageName == "cz.smable.pos") {
                       packageName = "com.viaaurea.webWrapper";
-                    }else{
+                    } else {
                       packageName = "cz.smable.pos";
                     }
-                  }else if(pressDuration>=5000 && stayedWithinClickDistance){
-                    sendEvent(context, "onButtonHolded", null)
+                  } else if (pressDuration >= 5000 && stayedWithinClickDistance) {
+                    sendEvent(context, "onButtonHolded", null);
                   }
 
                   return true;
                 case MotionEvent.ACTION_MOVE:
-                  //Calculate the X and Y coordinates of the view.
-                  if (stayedWithinClickDistance && distance(pressedX, pressedY, event.getX(), event.getY(), context) > MAX_CLICK_DISTANCE) {
+                  // Calculate the X and Y coordinates of the view.
+                  if (stayedWithinClickDistance
+                      && distance(pressedX, pressedY, event.getX(), event.getY(), context) > MAX_CLICK_DISTANCE) {
                     stayedWithinClickDistance = false;
                   }
                   params.x = initialX + (int) (event.getRawX() - initialTouchX);
                   params.y = initialY + (int) (event.getRawY() - initialTouchY);
-                  //Update the layout with new X & Y coordinate
+                  // Update the layout with new X & Y coordinate
                   windowManager.updateViewLayout(chatHeadView, params);
                   lastAction = event.getAction();
                   return true;
@@ -207,16 +208,16 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     return px / reactContext.getResources().getDisplayMetrics().density;
   }
 
- @ReactMethod
+  @ReactMethod
   public void requrestPermission(final Promise promise) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (!Settings.canDrawOverlays(getReactApplicationContext())) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getReactApplicationContext().getPackageName()));
-            getCurrentActivity().startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
-        } else {
-            isOverlayPermissionGranted = true;
-        }
+      if (!Settings.canDrawOverlays(getReactApplicationContext())) {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:" + getReactApplicationContext().getPackageName()));
+        getCurrentActivity().startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+      } else {
+        isOverlayPermissionGranted = true;
+      }
     }
     promise.resolve(isOverlayPermissionGranted);
   }
@@ -224,20 +225,20 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void checkOverlayPermission(final Promise promise) {
     if (!Settings.canDrawOverlays(getReactApplicationContext())) {
-        promise.resolve(false);
-        isOverlayPermissionGranted = false;
+      promise.resolve(false);
+      isOverlayPermissionGranted = false;
     } else {
-        promise.resolve(true);
-        isOverlayPermissionGranted = true;
+      promise.resolve(true);
+      isOverlayPermissionGranted = true;
     }
   }
 
   @ReactMethod
   public void showChatHead() {
-    if (isOverlayPermissionGranted && !isOpen){
+    if (isOverlayPermissionGranted && !isOpen) {
       RunHandler();
-    }else {
-      Log.e("warning","please request Permission first");
+    } else {
+      Log.e("warning", "please request Permission first");
     }
   }
 
