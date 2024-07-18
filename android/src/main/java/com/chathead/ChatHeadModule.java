@@ -36,7 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ComponentName;
 import android.content.SharedPreferences;
-import com.viaaurea.webWrapper.R;
+import com.chathead.R;
 
 import java.io.IOException;
 
@@ -81,7 +81,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     if ("cz.smable.pos".equals(packageName)) {
       chatHeadImage.setImageResource(context.getResources().getIdentifier("chat_head_profile_iv", "id", context.getPackageName()));
     }else {
-      chatHeadImage.setImageResource(R.mipmap.ic_launcher);
+      chatHeadImage.setImageResource(R.drawable.logo);
     }
 
     Intent intent = new Intent(Intent.ACTION_MAIN);
