@@ -79,9 +79,9 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     Context context = getReactApplicationContext();
 
     if ("cz.smable.pos" == packageName) {
-      chatHeadImage.setImageResource(R.drawable.smable);
-    }else {
       chatHeadImage.setImageResource(R.drawable.logo);
+    }else {
+      chatHeadImage.setImageResource(R.drawable.smable);
     }
 
     Intent intent = new Intent(Intent.ACTION_MAIN);
