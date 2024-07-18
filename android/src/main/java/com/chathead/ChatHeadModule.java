@@ -94,9 +94,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
   private void sendEvent(String eventName, @Nullable WritableMap params) {
     Context context = getReactApplicationContext();
-    context
-        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-        .emit(eventName, params);
+    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
   }
 
   private void RunHandler() {
