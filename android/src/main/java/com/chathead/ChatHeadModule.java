@@ -46,10 +46,10 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   private View chatHeadView;
   private WindowManager.LayoutParams params;
   private boolean isOverlayPermissionGranted = false;
-  private boolean isChatHeadActive = false;
   private String packageName = "cz.smable.pos";
   private static final int MAX_CLICK_DISTANCE = 15;
   private static final int MAX_CLICK_DURATION = 1000;
+  private SharedPreferences sharedPreferences;
   private long pressStartTime;
   private float pressedX;
   private float pressedY;
@@ -59,6 +59,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   public ChatHeadModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.context = reactContext;
+    sharedPreferences = reactContext.getSharedPreferences(NAME, Context.MODE_PRIVATE);
   }
 
   @Override
@@ -95,8 +96,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     new Handler(Looper.getMainLooper()).post(new Runnable() {
       @Override
       public void run() {
-        if(isChatHeadActive == false){
-          isChatHeadActive = true;
+        String isChatHeadActive = sharedPreferences.getString("isChatHeadActive", "");
+
+        if(isChatHeadActive != "yes"){
+          SharedPreferences.Editor editor = sharedPreferences.edit();
+          editor.putString("isChatHeadActive", "yes");
+          editor.apply();
         
           if (windowManager == null) {
             windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
