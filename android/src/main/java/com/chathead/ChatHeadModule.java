@@ -165,7 +165,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
                   if (pressDuration < MAX_CLICK_DURATION && stayedWithinClickDistance) {
                     startMainActivity(packageName, chatHeadImage);
                     if (packageName == "cz.smable.pos") {
-                      packageName = "com.viaaurea.webWrapper";
+                      packageName = "com.bellesfleurs.kiosk";
                     } else {
                       packageName = "cz.smable.pos";
                     }
