@@ -192,6 +192,30 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
           });
 
           windowManager.addView(chatHeadView, params);
+
+          Handler checkHandler = new Handler(Looper.getMainLooper());
+          Runnable checkRunnable = new Runnable() {
+              @Override
+              public void run() {
+                  // Check if the view is still attached to the windowManager
+                  if (chatHeadView.getParent() == null) {
+                      // If not, launch the application
+                      Intent intent = new Intent(Intent.ACTION_MAIN);
+
+                      intent.setComponent(new ComponentName("com.bellesfleurs.kiosk", "com.bellesfleurs.kiosk.MainActivity"));
+                      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                      
+                      if (intent != null) {
+                          context.startActivity(intent);
+                      }
+                  }
+                  // Re-run the check after 60 seconds
+                  checkHandler.postDelayed(this, 60000);
+              }
+          };
+          // Post the initial check
+          checkHandler.postDelayed(checkRunnable, 60000);
+
         }
       }
     });
