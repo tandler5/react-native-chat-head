@@ -80,9 +80,9 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     PackageManager pm = this.context.getPackageManager();
     try {
       pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-      return true
+      return true;
     } catch (Exception e) {
-      return false
+      return false;
     }
   }
 
@@ -283,7 +283,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public boolean isAppInstalled(String packageName) {
-     checkIfAppIsInstalled(packageName);
+    return checkIfAppIsInstalled(packageName);
   }
 
   @ReactMethod
