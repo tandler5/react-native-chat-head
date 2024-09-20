@@ -282,7 +282,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void isAppInstalled(String packageName) {
+  public boolean isAppInstalled(String packageName) {
     return checkIfAppIsInstalled(context, packageName);
   }
 
