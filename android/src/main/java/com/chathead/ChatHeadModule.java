@@ -17,6 +17,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageInfo;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -72,6 +73,16 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   // Use this method to get the current MainActivity instance
   private Activity getMainActivity() {
     return getCurrentActivity();
+  }
+
+  public boolean isAppInstalled(Context context, String packageName) {
+    PackageManager packageManager = context.getPackageManager();
+    try {
+        PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+        return true;  // Aplikace je nainstalována
+    } catch (PackageManager.NameNotFoundException e) {
+        return false;  // Aplikace není nainstalována
+    }
   }
 
   public void startMainActivity(String packageName, ImageView chatHeadImage) {
@@ -259,8 +270,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void showChatHead() {
-    if (isOverlayPermissionGranted && !isOpen) {
-      RunHandler();
+    if (isOverlayPermissionGranted) {
+      Context context = getReactApplicationContext();
+      boolean isInstalled = isAppInstalled(context, "cz.smable.pos");
+      if(!isOpen && isInstalled){
+         RunHandler();
+      }
     } else {
       Log.e("warning", "please request Permission first");
     }
