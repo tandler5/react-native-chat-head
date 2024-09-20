@@ -75,7 +75,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     return getCurrentActivity();
   }
 
-  public boolean isAppInstalled(Context context, String packageName) {
+  public boolean checkIfAppIsInstalled(Context context, String packageName) {
     PackageManager packageManager = context.getPackageManager();
     try {
         PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
@@ -272,13 +272,18 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   public void showChatHead() {
     if (isOverlayPermissionGranted) {
       Context context = getReactApplicationContext();
-      boolean isInstalled = isAppInstalled(context, "cz.smable.pos");
+      boolean isInstalled = checkIfAppIsInstalled(context, "cz.smable.pos");
       if(!isOpen && isInstalled){
          RunHandler();
       }
     } else {
       Log.e("warning", "please request Permission first");
     }
+  }
+
+  @ReactMethod
+  public void isAppInstalled(String packageName) {
+    return checkIfAppIsInstalled(context, packageName);
   }
 
   @ReactMethod

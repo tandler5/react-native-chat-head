@@ -25,6 +25,9 @@ const ChatHead = isAndroid
 export function showChatHead(): Promise<boolean> {
   return isAndroid ? ChatHead.showChatHead() : _logWarning();
 }
+export function isAppInstalled(packageName:string): boolean {
+  return isAndroid ? ChatHead.isAppInstalled(packageName) : _logWarning();
+}
 export function hideChatHead(): Promise<boolean> {
   return isAndroid ? ChatHead.hideChatHead() : _logWarning();
 }
@@ -44,6 +47,7 @@ export function checkOverlayPermission(): Promise<boolean> {
 }
 const chatHead = {
   showChatHead,
+  isAppInstalled,
   hideChatHead,
   updateChatBadgeCount,
   requrestPermission,
