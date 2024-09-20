@@ -77,14 +77,12 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   }
 
   public boolean checkIfAppIsInstalled(String packageName) {
-    Context context = getReactApplicationContext();
-    PackageManager packageManager = context.getPackageManager();
+    PackageManager pm = this.context.getPackageManager();
     try {
-        // Použití metody getApplicationInfo k získání informací o aplikaci
-        ApplicationInfo appInfo = packageManager.getApplicationInfo(packageName, 0);
-        return appInfo.enabled;  // Vrátí true, pokud je aplikace nainstalovaná a povolená
-    } catch (PackageManager.NameNotFoundException e) {
-        return false;  // Aplikace není nainstalována
+      pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+      return true
+    } catch (Exception e) {
+      return false
     }
   }
 
@@ -285,7 +283,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public boolean isAppInstalled(String packageName) {
-    return checkIfAppIsInstalled(packageName);
+     checkIfAppIsInstalled(packageName);
   }
 
   @ReactMethod
