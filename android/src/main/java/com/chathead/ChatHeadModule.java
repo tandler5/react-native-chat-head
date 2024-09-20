@@ -75,11 +75,13 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
     return getCurrentActivity();
   }
 
-  public boolean checkIfAppIsInstalled(Context context, String packageName) {
+  public boolean checkIfAppIsInstalled(String packageName) {
+    Context context = getReactApplicationContext();
     PackageManager packageManager = context.getPackageManager();
     try {
-        PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
-        return true;  // Aplikace je nainstalována
+        // Použití metody getApplicationInfo k získání informací o aplikaci
+        ApplicationInfo appInfo = packageManager.getApplicationInfo(packageName, 0);
+        return appInfo.enabled;  // Vrátí true, pokud je aplikace nainstalovaná a povolená
     } catch (PackageManager.NameNotFoundException e) {
         return false;  // Aplikace není nainstalována
     }
@@ -271,8 +273,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void showChatHead() {
     if (isOverlayPermissionGranted) {
-      Context context = getReactApplicationContext();
-      boolean isInstalled = checkIfAppIsInstalled(context, "cz.smable.pos");
+      boolean isInstalled = checkIfAppIsInstalled("cz.smable.pos");
       if(!isOpen && isInstalled){
          RunHandler();
       }
@@ -283,7 +284,7 @@ public class ChatHeadModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public boolean isAppInstalled(String packageName) {
-    return checkIfAppIsInstalled(context, packageName);
+    return checkIfAppIsInstalled(packageName);
   }
 
   @ReactMethod
