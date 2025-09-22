@@ -23,24 +23,24 @@ const ChatHead = isAndroid
   : null;
 
 export function showChatHead(): Promise<boolean> {
-  return isAndroid ? ChatHead.showChatHead() : _logWarning();
+  return isAndroid ? ChatHead.showChatHead() : !!_logWarning();
 }
 export function hideChatHead(): Promise<boolean> {
-  return isAndroid ? ChatHead.hideChatHead() : _logWarning();
+  return isAndroid ? ChatHead.hideChatHead() : !!_logWarning();
 }
 export function updateChatBadgeCount(count: number): Promise<boolean> {
   if (typeof count !== 'number') {
     throw new Error('count must be a number');
   }
-  return isAndroid ? ChatHead.updateBadgeCount(count) : _logWarning();
+  return isAndroid ? ChatHead.updateBadgeCount(count) : !!_logWarning();
 }
 
 export function requrestPermission(): Promise<boolean> {
-  return isAndroid ? ChatHead.requrestPermission() : _logWarning();
+  return isAndroid ? ChatHead.requrestPermission() : !!_logWarning();
 }
 
 export function checkOverlayPermission(): Promise<boolean> {
-  return isAndroid ? ChatHead.checkOverlayPermission() : _logWarning();
+  return isAndroid ? ChatHead.checkOverlayPermission() : !!_logWarning();
 }
 const chatHead = {
   showChatHead,
